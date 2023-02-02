@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaBolt } from "react-icons/fa";
-import { TbFaceIdError } from "react-icons/tb"
+import { TbFaceIdError } from "react-icons/tb";
 import { format } from "date-fns";
 import { AlertMsg } from "@/utils";
 import "./BatteryComponent.scss";
@@ -12,11 +12,12 @@ const BatteryComponent = () => {
   const [batteryStatus, setBatteryStatus] = useState(null);
   const [batteryAnimationFillMode, setBatteryAnimationFillMode] =
     useState("infinite");
-  const [isBatterySupported, setIsBatterySupported] = useState(null);
+  const [isBatterySupported, setIsBatterySupported] = useState("getBattery" in navigator);
 
   const setBatteryState = (battery) => {
     const { level, charging } = battery;
     const keyframeValue = getBatteryKeyframe(level * 100);
+    const fillMode = level > batteryStatus?.level ? "forwards" : "backwards";
     setBatteryLevel(`${level * 100}%`);
     setKeyframe(keyframeValue);
     setBatteryAnimationFillMode("forwards");
@@ -50,7 +51,7 @@ const BatteryComponent = () => {
     setIsBatterySupported("getBattery" in navigator);
     if (!isBatterySupported) {
       setBatteryLevel(`0%`);
-      setKeyframe('battery-charge-lower');
+      setKeyframe("battery-charge-lower");
       setBatteryAnimationFillMode("forwards");
       AlertMsg({
         title: "Battery Information!",
@@ -91,7 +92,9 @@ const BatteryComponent = () => {
         <div className="battery-widget__head" />
         <div className="battery-widget__body">
           {isCharging && <FaBolt className="battery-widget__body__icon" />}
-          {!isBatterySupported && <TbFaceIdError className="battery-widget__body__icon !text-7xl !left-[30%]" />} 
+          {!isBatterySupported && (
+            <TbFaceIdError className="battery-widget__body__icon !text-7xl !left-[30%]" />
+          )}
           <div
             className="battery-widget__body__charge"
             style={{
@@ -102,18 +105,22 @@ const BatteryComponent = () => {
           />
         </div>
       </div>
-      {isBatterySupported && <div className="battery-info">
-        <span className="battery-info__head">
-          <span className="text-2xl text-gray-500">{format(new Date(), "PPpp")}.</span>
-          <br />
-          <span className="text-xl text-blue-500">
-            The Battery is {isCharging ? "charging" : "not charging"}.
+      {isBatterySupported && (
+        <div className="battery-info">
+          <span className="battery-info__head">
+            <span className="text-2xl text-gray-500">
+              {format(new Date(), "PPpp")}.
+            </span>
+            <br />
+            <span className="text-xl text-blue-500">
+              The Battery is {isCharging ? "charging" : "not charging"}.
+            </span>
           </span>
-        </span>
-        <span className="battery-info__body">
-          The current percentage of load is: {batteryLevel}.
-        </span>
-      </div>}
+          <span className="battery-info__body">
+            The current percentage of load is: {batteryLevel}.
+          </span>
+        </div>
+      )}
     </>
   );
 };
