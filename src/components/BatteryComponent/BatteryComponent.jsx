@@ -13,7 +13,10 @@ const BatteryComponent = () => {
   const [batteryStatus, setBatteryStatus] = useState(null);
   const [batteryAnimationFillMode, setBatteryAnimationFillMode] =
     useState("infinite");
-  const [isBatterySupported, setIsBatterySupported] = useState("getBattery" in navigator);
+  const [isBatterySupported, setIsBatterySupported] = useState(
+    "getBattery" in navigator
+  );
+  const [showLevel, setShowLevel] = useState(false);
 
   const setBatteryState = (battery) => {
     const { level, charging } = battery;
@@ -22,6 +25,10 @@ const BatteryComponent = () => {
     setKeyframe(keyframeValue);
     setBatteryAnimationFillMode("forwards");
     setIsCharging(charging);
+    setShowLevel(true);
+    setTimeout(() => {
+      setShowLevel(false);
+    }, 3000);
   };
 
   const getBatteryKeyframe = (v) => {
@@ -91,7 +98,15 @@ const BatteryComponent = () => {
       <div className="battery-widget">
         <div className="battery-widget__head" />
         <div className="battery-widget__body">
-          {isCharging && <FaBolt className="battery-widget__body__icon" />}
+          {showLevel && (
+            <span className="battery-widget__body__level">{batteryLevel}</span>
+          )}
+          {isCharging && isBatterySupported && (
+            <FaBolt className="battery-widget__body__icon" />
+          )}
+          {!isCharging && isBatterySupported && (
+            <BsArrowDownCircle className="battery-widget__body__icon" />
+          )}
           {!isBatterySupported && (
             <TbFaceIdError className="battery-widget__body__icon !text-7xl !left-[30%]" />
           )}
