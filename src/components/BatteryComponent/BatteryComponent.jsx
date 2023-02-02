@@ -49,7 +49,7 @@ const BatteryComponent = () => {
 
   useEffect(() => {
     setIsBatterySupported("getBattery" in navigator);
-    if (!isBatterySupported) {
+    if (!("getBattery" in navigator)) {
       setBatteryLevel(`0%`);
       setKeyframe("battery-charge-lower");
       setBatteryAnimationFillMode("forwards");
