@@ -143,7 +143,7 @@
 }
 
 .battery-info {
-  @apply self-center flex flex-col absolute translate-x-[80%] translate-y-[-110%] drop-shadow-md;
+  @apply self-center flex flex-col absolute translate-x-[80%] translate-y-[-110%] drop-shadow-lg;
   &__head{
     @apply ml-10 font-extrabold;
   }
