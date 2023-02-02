@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaBolt } from "react-icons/fa";
 import { TbFaceIdError } from "react-icons/tb";
+import { BsArrowDownCircle } from "react-icons/bs";
 import { format } from "date-fns";
 import { AlertMsg } from "@/utils";
 import "./BatteryComponent.scss";
@@ -17,10 +18,9 @@ const BatteryComponent = () => {
   const setBatteryState = (battery) => {
     const { level, charging } = battery;
     const keyframeValue = getBatteryKeyframe(level * 100);
-    const fillMode = level > batteryStatus?.level ? "forwards" : "backwards";
     setBatteryLevel(`${level * 100}%`);
     setKeyframe(keyframeValue);
-    setBatteryAnimationFillMode(fillMode);
+    setBatteryAnimationFillMode("forwards");
     setIsCharging(charging);
   };
 
