@@ -28,7 +28,7 @@ const BatteryComponent = () => {
     setShowLevel(true);
     setTimeout(() => {
       setShowLevel(false);
-    }, 3000);
+    }, 8000);
   };
 
   const getBatteryKeyframe = (v) => {
