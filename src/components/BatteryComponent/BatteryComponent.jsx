@@ -20,7 +20,7 @@ const BatteryComponent = () => {
     const fillMode = level > batteryStatus?.level ? "forwards" : "backwards";
     setBatteryLevel(`${level * 100}%`);
     setKeyframe(keyframeValue);
-    setBatteryAnimationFillMode("forwards");
+    setBatteryAnimationFillMode(fillMode);
     setIsCharging(charging);
   };
 
