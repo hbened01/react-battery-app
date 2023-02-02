@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaBolt } from "react-icons/fa";
+import { TbFaceIdError } from "react-icons/tb"
 import { format } from "date-fns";
 import { AlertMsg } from "@/utils";
 import "./BatteryComponent.scss";
@@ -11,6 +12,7 @@ const BatteryComponent = () => {
   const [batteryStatus, setBatteryStatus] = useState(null);
   const [batteryAnimationFillMode, setBatteryAnimationFillMode] =
     useState("infinite");
+  const [isBatterySupported, setIsBatterySupported] = useState(null);
 
   const setBatteryState = (battery) => {
     const { level, charging } = battery;
@@ -45,8 +47,11 @@ const BatteryComponent = () => {
   };
 
   useEffect(() => {
-    let isBatterySupported = "getBattery" in navigator;
+    setIsBatterySupported("getBattery" in navigator);
     if (!isBatterySupported) {
+      setBatteryLevel(`0%`);
+      setKeyframe('battery-charge-lower');
+      setBatteryAnimationFillMode("forwards");
       AlertMsg({
         title: "Battery Information!",
         text: "Battery not supported",
@@ -86,6 +91,7 @@ const BatteryComponent = () => {
         <div className="battery-widget__head" />
         <div className="battery-widget__body">
           {isCharging && <FaBolt className="battery-widget__body__icon" />}
+          {!isBatterySupported && <TbFaceIdError className="battery-widget__body__icon !text-7xl !left-[30%]" />} 
           <div
             className="battery-widget__body__charge"
             style={{
@@ -96,7 +102,7 @@ const BatteryComponent = () => {
           />
         </div>
       </div>
-      <div className="battery-info">
+      {isBatterySupported && <div className="battery-info">
         <span className="battery-info__head">
           <span className="text-2xl text-gray-500">{format(new Date(), "PPpp")}.</span>
           <br />
@@ -107,7 +113,7 @@ const BatteryComponent = () => {
         <span className="battery-info__body">
           The current percentage of load is: {batteryLevel}.
         </span>
-      </div>
+      </div>}
     </>
   );
 };
